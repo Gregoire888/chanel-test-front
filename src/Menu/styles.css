@@ -33,3 +33,31 @@
     }
   }
 }
+
+.slide-left {
+  animation: left-to-right 0.7s ease-in;
+  animation-fill-mode: both;
+}
+
+.slide-right {
+  animation: right-to-left 0.7s ease-in;
+  animation-fill-mode: both;
+}
+
+@keyframes right-to-left {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes left-to-right {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}

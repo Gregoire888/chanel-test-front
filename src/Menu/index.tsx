@@ -64,17 +64,17 @@ const MenuHeader: React.FC<{
     <motion.div
       initial={{
         opacity: 0,
-        translateX: slideDirection === "left" ? -100 : 100,
+        x: slideDirection === "left" ? -100 : 100,
       }}
       animate={{
         opacity: 1,
-        translateX: 0,
+        x: 0,
       }}
       exit={{
         opacity: 0,
-        translateX: slideDirection === "left" ? 100 : -100,
+        x: slideDirection === "left" ? 100 : -100,
       }}
-      className="menu-header"
+      className={`menu-header slide-${slideDirection}`}
       onClick={() => clicked()}
     >
       <ArrowLeft className="arrow" />
@@ -89,18 +89,19 @@ const MenuItem: React.FC<{
 }> = ({ item, slideDirection, clicked }) => {
   return (
     <motion.div
-      className="menu-item"
+      className={`menu-item slide-${slideDirection}`}
       initial={{
         opacity: 0,
-        translateX: slideDirection === "left" ? -100 : 100,
+        x: slideDirection === "left" ? -100 : 100,
       }}
       animate={{
         opacity: 1,
-        translateX: 0,
+        x: 0,
       }}
       exit={{
         opacity: 0,
-        translateX: slideDirection === "left" ? 100 : -100,
+        x: slideDirection === "left" ? 100 : -100,
+        height: 0,
       }}
       onClick={() => {
         if (item.children?.length) {
