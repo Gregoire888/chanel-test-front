@@ -1,0 +1,63 @@
+.menu {
+  background: #f6f6f6;
+  overflow: hidden;
+}
+
+.menu-header {
+  cursor: pointer;
+  padding: 1rem;
+
+  &:hover {
+    .arrow {
+      color: #4f565b;
+    }
+  }
+}
+
+.arrow {
+  width: 1rem;
+  color: #bbbbbb;
+}
+
+.menu-item {
+  cursor: pointer;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &:hover {
+    background: #d6ebf6;
+    .arrow {
+      color: #4f565b;
+    }
+  }
+}
+
+.slide-left {
+  animation: left-to-right 0.7s ease-in;
+  animation-fill-mode: both;
+}
+
+.slide-right {
+  animation: right-to-left 0.7s ease-in;
+  animation-fill-mode: both;
+}
+
+@keyframes right-to-left {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes left-to-right {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
