@@ -3,6 +3,7 @@ import "./styles.css";
 import { MenuItemType, MenuItemWithParentId } from "./types";
 import { ArrowLeft, ArrowRight } from "react-feather";
 import { addParentId, findNodeInTree } from "./tree.helpers";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const Menu: React.FC<{ items: MenuItemType[] }> = ({ items }) => {
   const [slideDirection, setSlideDirection] = useState<"left" | "right">(
@@ -19,37 +20,65 @@ export const Menu: React.FC<{ items: MenuItemType[] }> = ({ items }) => {
 
   return (
     <div className="menu">
-      {currentItem && (
-        <div
-          className={`menu-header slide-${slideDirection}`}
-          onClick={() => {
-            setSlideDirection("left");
-            if (!currentItem.parentId) {
-              setCurrentItem(null);
-              return;
-            }
-            setCurrentItem(
-              findNodeInTree(formattedItems, currentItem.parentId) ?? null
-            );
-          }}
-        >
-          <ArrowLeft className="arrow" />
-        </div>
-      )}
+      <AnimatePresence>
+        {currentItem && (
+          <MenuHeader
+            slideDirection={slideDirection}
+            clicked={() => {
+              setSlideDirection("left");
+              if (!currentItem.parentId) {
+                setCurrentItem(null);
+                return;
+              }
+              setCurrentItem(
+                findNodeInTree(formattedItems, currentItem.parentId) ?? null
+              );
+            }}
+          />
+        )}
+      </AnimatePresence>
       <div className="menu-items">
         {(currentItem?.children ?? formattedItems).map((item) => (
-          <MenuItem
-            item={item}
-            slideDirection={slideDirection}
-            clicked={(item) => {
-              setSlideDirection("right");
-              setCurrentItem(item);
-            }}
-            key={item.id}
-          />
+          <AnimatePresence>
+            <MenuItem
+              item={item}
+              slideDirection={slideDirection}
+              clicked={(item) => {
+                setSlideDirection("right");
+                setCurrentItem(item);
+              }}
+              key={item.id}
+            />
+          </AnimatePresence>
         ))}
       </div>
     </div>
+  );
+};
+
+const MenuHeader: React.FC<{
+  slideDirection: "left" | "right";
+  clicked: () => void;
+}> = ({ slideDirection, clicked }) => {
+  return (
+    <motion.div
+      initial={{
+        opacity: 0,
+        translateX: slideDirection === "left" ? -100 : 100,
+      }}
+      animate={{
+        opacity: 1,
+        translateX: 0,
+      }}
+      exit={{
+        opacity: 0,
+        translateX: slideDirection === "left" ? 100 : -100,
+      }}
+      className="menu-header"
+      onClick={() => clicked()}
+    >
+      <ArrowLeft className="arrow" />
+    </motion.div>
   );
 };
 
@@ -59,8 +88,20 @@ const MenuItem: React.FC<{
   clicked: (item: MenuItemWithParentId) => void;
 }> = ({ item, slideDirection, clicked }) => {
   return (
-    <div
-      className={`menu-item slide-${slideDirection}`}
+    <motion.div
+      className="menu-item"
+      initial={{
+        opacity: 0,
+        translateX: slideDirection === "left" ? -100 : 100,
+      }}
+      animate={{
+        opacity: 1,
+        translateX: 0,
+      }}
+      exit={{
+        opacity: 0,
+        translateX: slideDirection === "left" ? 100 : -100,
+      }}
       onClick={() => {
         if (item.children?.length) {
           clicked(item);
@@ -69,6 +110,6 @@ const MenuItem: React.FC<{
     >
       {item.label}
       {item.children?.length && <ArrowRight className="arrow" />}
-    </div>
+    </motion.div>
   );
 };
